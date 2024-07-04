@@ -1,0 +1,35 @@
+name: Update News
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 每天凌晨1点运行
+  push:
+    branches:
+      - main  # 当 main 分支有推送时运行
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # 使用你需要的 Python 版本
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Update news.json
+      run: |
+        python update_news.py
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add news.json
+        git commit -m 'Update news.json'
+        git push
