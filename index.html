@@ -4,34 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>每日新闻</title>
 </head>
 
 <body>
-    <h1>这是一个标题</h1>
-    <h4>数据统计:水花兄弟狂砍64分</h4>
-    <p>库里22投11中,三分14投4中,罚球11罚全中得到37分8篮板8助攻,职业生涯季后赛得分30+次数来到35次,超过哈登
-        排名现役第3位,仅次于詹姆斯和杜兰特 </p>
-    <p>
-        汤普森22投8中,三分8投4中得到24分3蓝板2助攻,德拉蒙德-格林得到16分10蓝板7助攻5盖帽,凯文-鲁尼得到14分7
-        篮板2助攻,今天勇士有7名替补出场。
-    </p>
-    <h4>
-        兄弟对决, 其利断金,太棒了
-    </h4>
-    <p>
-        汤普森22投8中,三分8投4中得到24分3蓝板2助攻,德拉蒙德-格林得到16分10蓝板7助攻5盖帽,凯文-鲁尼得到14分7
-        篮板2助攻,今天勇士有7名替补出场。
-    </p>
+    <h1>每日新闻</h1>
+    <div id="news-container"></div>
 
-    <p>
-        汤普森22投8中,三分8投4中得到24分3蓝板2助攻,德拉蒙德-格林得到16分10蓝板7助攻5盖帽,凯文-鲁尼得到14分7
-        篮板2助攻,今天勇士有7名替补出场。
-    </p>
-    <p>
-        <strong><em><del><ins>作者:周海龙<br>2024-07-03</ins></del></em></strong>
-    </p>
-    <img src="001.jpg" alt="网络故障" title = "这是一个化妆包" border = "2">
+    <script>
+        async function loadNews() {
+            try {
+                const response = await fetch('news.json'); // 确认路径正确
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const newsData = await response.json();
+
+                const newsContainer = document.getElementById('news-container');
+
+                // 创建标题
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = newsData.title;
+                newsContainer.appendChild(titleElement);
+
+                // 创建微语
+                const weiyuElement = document.createElement('p');
+                weiyuElement.textContent = newsData.data.weiyu;
+                newsContainer.appendChild(weiyuElement);
+
+                // 创建新闻列表
+                const newsList = document.createElement('ul');
+                newsData.data.news.forEach(newsItem => {
+                    const newsElement = document.createElement('li');
+                    newsElement.textContent = newsItem;
+                    newsList.appendChild(newsElement);
+                });
+                newsContainer.appendChild(newsList);
+            } catch (error) {
+                console.error('Error loading news:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadNews);
+    </script>
 </body>
 
 </html>
